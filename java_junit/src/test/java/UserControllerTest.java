@@ -1,77 +1,117 @@
 import org.junit.Before;
 import org.junit.Test;
-import org.junit.experimental.runners.Enclosed;
-import org.junit.experimental.theories.DataPoints;
-import org.junit.experimental.theories.Theories;
-import org.junit.experimental.theories.Theory;
-import org.junit.runner.RunWith;
-import java.sql.SQLException;
-import java.util.*;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 import static org.junit.Assert.assertEquals;
 
-@RunWith(Enclosed.class)
 public class UserControllerTest {
 
-    public static class BaseBefore {
-        protected  static DataBase con;
-        @Before
-        public void setUp() {
-            this.con = new DataBase();
-            con.execute("delete from user;");
-        }
+    private DataBase con;
+
+    @Before
+    public void initDB() {
+        con = new DataBase();
+        con.execute("delete from user;");
     }
 
-    @RunWith(Theories.class)
-    public static class SearchMethod extends BaseBefore {
-
-        @Before
-        public void setup() {
-            con.execute("insert into user (name, age) values ('kanai', '28');");
-            con.execute("insert into user (name, age) values ('daiki', '28');");
-            con.execute("insert into user (name, age) values ('daiki', '29');");
-        }
-
-        @DataPoints
-        public static String[][] patterns = {
-                {"28", "kanai",    "1"},
-                {"28", "no match", "0"},
-                {"29", "daiki",    "2"},
-                {"28", "daiki",    "1"},
-                {"",   "",         "3"},
-        };
-
-        @Theory
-        public void 検索パターン(String[] pattern) {
-            //given
-            Map<String, String> params = new HashMap<>();
-            params.put("age", pattern[0]);
-            params.put("name", pattern[1]);
-            //when
-            UserController userContorller = new UserController();
-            userContorller.search(params);
-            //then
-            assertEquals("pattern: " + pattern[0]+pattern[1], Integer.parseInt(pattern[2]), userContorller.list.size());
-        }
+    @Test
+    public void create() {
+        //given
+        Map<String, String> params = createUserMap("kanai", "20");
+        //when
+        new UserController().create(params);
+        //then
+        List<Map> list = con.find("select * from user;");
+        assertEquals(1, list.size());
+        assertUserMap(list.get(0), "kanai", 20);
     }
 
-    public static class CreateMethod extends BaseBefore {
+    @Test
+    public void multi_create() {
+        createMultiUsers();
 
-        @Test
-        public void create() {
-            //given
-            Map<String, String> params = new HashMap<String, String>();
-            params.put("name", "kanai");
-            params.put("age", "20");
-            //when
-            new UserController().create(params);
-            //then
-            List<Map> list = con.find("select * from user;");
-            assertEquals(1, list.size());
-            assertEquals("kanai", list.get(0).get("name"));
-            assertEquals(20, list.get(0).get("age"));
-        }
+        //then
+        List<Map> list = con.find("select * from user order by id;");
+        assertEquals(2, list.size());
+        assertEquals("kanai", list.get(0).get("name"));
+        assertEquals(20, list.get(0).get("age"));
+        assertEquals("yoshimitsu", list.get(1).get("name"));
+        assertEquals(30, list.get(1).get("age"));
+    }
+
+    @Test
+    public void searchName() {
+        createMultiUsers();
+
+        //when
+        List<Map> list = new UserController().searchName("kanai");
+
+        //then
+        assertEquals(1, list.size());
+        assertEquals("kanai", list.get(0).get("name"));
+        assertEquals(20, list.get(0).get("age"));
+    }
+
+    @Test
+    public void searchAge() {
+        createMultiUsers();
+
+        //when
+        List<Map> list = new UserController().searchAge("20");
+
+        //then
+        assertEquals(1, list.size());
+        assertUserMap(list.get(0), "kanai", 20);
+        assertEquals("kanai", list.get(0).get("name"));
+        assertEquals(20, list.get(0).get("age"));
+    }
+
+    private void assertUserMap(Map map, String name, int age) {
+        assertEquals(name, map.get("name"));
+        assertEquals(age, map.get("age"));
+    }
+
+    @Test
+    public void searchAgeAndName() {
+        createMultiUsers();
+
+        //when
+        List<Map> list = new UserController().searchAgeAndName("20", "kanai");
+
+        //then
+        assertEquals(1, list.size());
+        assertEquals("kanai", list.get(0).get("name"));
+        assertEquals(20, list.get(0).get("age"));
+    }
+
+    @Test
+    public void searchAgeAndName2() {
+        createMultiUsers();
+        new UserController().create(createUserMap("Yuito", "20"));
+        //when
+        List<Map> list = new UserController().searchAgeAndName("20", "Yuito");
+
+        //then
+        assertEquals(1, list.size());
+        assertEquals("Yuito", list.get(0).get("name"));
+        assertEquals(20, list.get(0).get("age"));
+    }
+
+    private void createMultiUsers() {
+        Map<String, String> params1 = createUserMap("kanai", "20");
+        Map<String, String> params2 = createUserMap("yoshimitsu", "30");
+        new UserController().create(params1);
+        new UserController().create(params2);
 
     }
 
+    private Map<String, String> createUserMap(String name, String age) {
+        Map<String, String> userMap = new HashMap<String, String>();
+        userMap.put("name", name);
+        userMap.put("age", age);
+        return userMap;
+    }
 }
+
 
