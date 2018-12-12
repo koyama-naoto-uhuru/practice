@@ -12,14 +12,23 @@ public class HealthMonitor {
     }
 
     public void run() {
-        DataBase dataBase = new DataBase();
-        List list = dataBase.find("select * from log where status = 0;");
-        String color;
-        if (list.size() == 1) {
-            color = "Red";
-        } else {
-            color = "Green";
-        }
+        String color = new DataApi().getColor();
         mockHardWareController.changeColor(color);
+    }
+
+
+    private class DataApi {
+        private String getColor() {
+            DataBase dataBase = new DataBase();
+            List list = dataBase.find("select * from log where status = 0;");
+            String color;
+            if (list.size() == 1) {
+                color = "Red";
+            } else {
+                color = "Green";
+            }
+            return color;
+        }
+
     }
 }
