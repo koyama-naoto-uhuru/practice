@@ -1,3 +1,6 @@
+package database;
+
+import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.experimental.runners.Enclosed;
@@ -50,7 +53,7 @@ public class UserControllerTest {
             UserController userContorller = new UserController();
             userContorller.search(params);
             //then
-            assertEquals("pattern: " + pattern[0]+pattern[1], Integer.parseInt(pattern[2]), userContorller.list.size());
+            Assert.assertEquals("pattern: " + pattern[0]+pattern[1], Integer.parseInt(pattern[2]), userContorller.list.size());
         }
     }
 
