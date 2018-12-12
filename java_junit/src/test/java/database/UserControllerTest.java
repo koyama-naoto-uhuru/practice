@@ -1,49 +1,40 @@
 package database;
 
-import org.junit.Assert;
-import org.junit.Before;
-import org.junit.Test;
-import org.junit.experimental.runners.Enclosed;
-import org.junit.experimental.theories.DataPoints;
-import org.junit.experimental.theories.Theories;
-import org.junit.experimental.theories.Theory;
-import org.junit.runner.RunWith;
-import java.sql.SQLException;
-import java.util.*;
-import static org.junit.Assert.assertEquals;
+import org.junit.jupiter.api.BeforeEach;
 
-@RunWith(Enclosed.class)
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
+import static org.junit.jupiter.api.Assertions.assertEquals;
+
 public class UserControllerTest {
 
-    public static class BaseBefore {
-        protected  static DataBase con;
-        @Before
-        public void setUp() {
-            this.con = new DataBase();
-            con.execute("delete from user;");
-        }
+    DataBase con;
+
+    @BeforeEach
+    public void setUp() {
+        this.con = new DataBase();
+        con.execute("delete from user;");
     }
 
-    @RunWith(Theories.class)
-    public static class SearchMethod extends BaseBefore {
+    class SearchMethod {
 
-        @Before
+        @BeforeEach
         public void setup() {
             con.execute("insert into user (name, age) values ('kanai', '28');");
             con.execute("insert into user (name, age) values ('daiki', '28');");
             con.execute("insert into user (name, age) values ('daiki', '29');");
         }
 
-        @DataPoints
-        public static String[][] patterns = {
-                {"28", "kanai",    "1"},
+        public String[][] patterns = {
+                {"28", "kanai", "1"},
                 {"28", "no match", "0"},
-                {"29", "daiki",    "2"},
-                {"28", "daiki",    "1"},
-                {"",   "",         "3"},
+                {"29", "daiki", "2"},
+                {"28", "daiki", "1"},
+                {"", "", "3"},
         };
 
-        @Theory
         public void 検索パターン(String[] pattern) {
             //given
             Map<String, String> params = new HashMap<>();
@@ -53,13 +44,12 @@ public class UserControllerTest {
             UserController userContorller = new UserController();
             userContorller.search(params);
             //then
-            Assert.assertEquals("pattern: " + pattern[0]+pattern[1], Integer.parseInt(pattern[2]), userContorller.list.size());
+            assertEquals(Float.parseFloat("pattern: " + pattern[0] + pattern[1]), Integer.parseInt(pattern[2]), userContorller.list.size());
         }
     }
 
-    public static class CreateMethod extends BaseBefore {
+    class CreateMethod {
 
-        @Test
         public void create() {
             //given
             Map<String, String> params = new HashMap<String, String>();
