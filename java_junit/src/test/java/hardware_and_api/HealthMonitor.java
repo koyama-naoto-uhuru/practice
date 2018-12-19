@@ -22,7 +22,7 @@ public class HealthMonitor {
             DataBase dataBase = new DataBase();
             List list = dataBase.find("select * from log where status = 0;");
             String color;
-            if (list.size() == 1) {
+            if (list.size() >= 1) {
                 color = "Red";
             } else {
                 color = "Green";
