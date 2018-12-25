@@ -50,12 +50,29 @@ public class VendingMachineTest {
             assertEquals(vm.inventory(), "coke:0 water:0");
         }
 
+        @Test
+        void buy4() {
+            //given
+            VendingMachine vm = new VendingMachine();
+            vm.addDrink("coke");
+            vm.addDrink("water");
+            vm.addDrink("water");
+            //when
+            vm.buy("water");
+            //then
+            assertEquals(vm.inventory(), "coke:1 water:1");
+        }
+
+
         private class VendingMachine {
 
             List<String> drinks = new ArrayList();
 
             public void buy(String name) {
-                drinks.remove(0);
+                drinks.stream()
+                        .filter(drink -> drink.equals(name))
+                        .findFirst()
+                        .map(drink -> drinks.remove(drink));
             }
 
             public void addDrink(String name) {
@@ -65,7 +82,7 @@ public class VendingMachineTest {
             public String inventory() {
                 int cokeCount = (int) drinks.stream().filter(name -> name == "coke").count();
                 int waterCount = (int) drinks.stream().filter(name -> name == "water").count();
-                return "coke:"+cokeCount+" water:"+waterCount;
+                return "coke:" + cokeCount + " water:" + waterCount;
             }
         }
     }
