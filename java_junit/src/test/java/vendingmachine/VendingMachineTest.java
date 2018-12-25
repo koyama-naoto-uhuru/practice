@@ -4,12 +4,71 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.List;
 
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.MatcherAssert.assertThat;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 public class VendingMachineTest {
+
+    @Nested
+    class TopDown {
+        @Test
+        void buy() {
+            //given
+            VendingMachine vm = new VendingMachine();
+            vm.addDrink("coke");
+            //when
+            vm.buy("coke");
+            //then
+            assertEquals(vm.inventory(), "coke:0 water:0");
+        }
+
+        @Test
+        void buy2() {
+            //given
+            VendingMachine vm = new VendingMachine();
+            vm.addDrink("coke");
+            vm.addDrink("coke");
+            //when
+            vm.buy("coke");
+            //then
+            assertEquals(vm.inventory(), "coke:1 water:0");
+        }
+
+        @Test
+        void buy3() {
+            //given
+            VendingMachine vm = new VendingMachine();
+            vm.addDrink("water");
+            //when
+            vm.buy("water");
+            //then
+            assertEquals(vm.inventory(), "coke:0 water:0");
+        }
+
+        private class VendingMachine {
+
+            List<String> drinks = new ArrayList();
+
+            public void buy(String name) {
+                drinks.remove(0);
+            }
+
+            public void addDrink(String name) {
+                drinks.add(name);
+            }
+
+            public String inventory() {
+                int cokeCount = (int) drinks.stream().filter(name -> name == "coke").count();
+                int waterCount = (int) drinks.stream().filter(name -> name == "water").count();
+                return "coke:"+cokeCount+" water:"+waterCount;
+            }
+        }
+    }
 
     @Test
     void chargeValidMoney() {
@@ -145,7 +204,8 @@ public class VendingMachineTest {
             assertThat(vm.inventory(), is("coke 120yen: 5"));
         }
     }
-
 }
+
+
 
 
