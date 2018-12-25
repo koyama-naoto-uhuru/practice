@@ -16,59 +16,57 @@ public class VendingMachineTest {
 
     @Nested
     class TopDown {
+
         @Test
-        void buy() {
-            //given
+        void currentChargeWhenBuyDrink() {
             VendingMachine vm = new VendingMachine();
             vm.charge(1000);
             vm.addDrink("coke");
-            //when
             vm.buy("coke");
-            //then
-            assertEquals(vm.inventory(), "coke:0 water:0");
             assertEquals(vm.currentCharge(), 880);
         }
 
         @Test
-        void buy2() {
-            //given
-            VendingMachine vm = new VendingMachine();
-            vm.charge(1000);
-            vm.addDrink("coke");
-            vm.addDrink("coke");
-            //when
-            vm.buy("coke");
-            //then
-            assertEquals(vm.inventory(), "coke:1 water:0");
-        }
-
-        @Test
-        void buy3() {
-            //given
+        void currentChargeWhenBuyDrink2() {
             VendingMachine vm = new VendingMachine();
             vm.charge(1000);
             vm.addDrink("water");
-            //when
             vm.buy("water");
-            //then
-            assertEquals(vm.inventory(), "coke:0 water:0");
             assertEquals(vm.currentCharge(), 850);
         }
 
         @Test
-        void buy4() {
-            //given
-            VendingMachine vm = new VendingMachine();
-            vm.charge(1000);
-            vm.addDrink("coke");
-            vm.addDrink("water");
-            vm.addDrink("water");
-            //when
-            vm.buy("water");
-            //then
-            assertEquals(vm.inventory(), "coke:1 water:1");
+        void inventoryInfoWhenBuyDrink() {
+            List<Pattern> patterns = Arrays.asList(
+                    new Pattern(Arrays.asList("coke"), "coke", "coke:0 water:0"),
+                    new Pattern(Arrays.asList("coke", "coke"), "coke", "coke:1 water:0"),
+                    new Pattern(Arrays.asList("water"), "water", "coke:0 water:0"),
+                    new Pattern(Arrays.asList("coke", "water", "water"), "water", "coke:1 water:1")
+            );
+            patterns.forEach(pattern -> {
+                VendingMachine vm = new VendingMachine();
+                vm.charge(1000);
+                pattern.drinks.forEach(drink -> {
+                    vm.addDrink(drink);
+                });
+                vm.buy(pattern.buyName);
+                assertEquals(vm.inventory(), pattern.expected);
+            });
         }
 
+        class Pattern {
+
+            private final List<String> drinks;
+            private final String buyName;
+            private final String expected;
+
+            public Pattern(List<String> drinks, String buyName, String expected) {
+
+                this.drinks = drinks;
+                this.buyName = buyName;
+                this.expected = expected;
+            }
+        }
 
         private class VendingMachine {
             Inventory inventory = new Inventory();
@@ -83,7 +81,7 @@ public class VendingMachineTest {
 
             public void addDrink(String name) {
                 inventory.drinks.add(name);
-                if(name.equals("coke")) {
+                if (name.equals("coke")) {
                     money = money - 120;
                 } else {
                     money = money - 150;
