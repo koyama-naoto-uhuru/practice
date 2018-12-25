@@ -20,17 +20,20 @@ public class VendingMachineTest {
         void buy() {
             //given
             VendingMachine vm = new VendingMachine();
+            vm.charge(1000);
             vm.addDrink("coke");
             //when
             vm.buy("coke");
             //then
             assertEquals(vm.inventory(), "coke:0 water:0");
+            assertEquals(vm.currentCharge(), 880);
         }
 
         @Test
         void buy2() {
             //given
             VendingMachine vm = new VendingMachine();
+            vm.charge(1000);
             vm.addDrink("coke");
             vm.addDrink("coke");
             //when
@@ -43,17 +46,20 @@ public class VendingMachineTest {
         void buy3() {
             //given
             VendingMachine vm = new VendingMachine();
+            vm.charge(1000);
             vm.addDrink("water");
             //when
             vm.buy("water");
             //then
             assertEquals(vm.inventory(), "coke:0 water:0");
+            assertEquals(vm.currentCharge(), 850);
         }
 
         @Test
         void buy4() {
             //given
             VendingMachine vm = new VendingMachine();
+            vm.charge(1000);
             vm.addDrink("coke");
             vm.addDrink("water");
             vm.addDrink("water");
@@ -66,6 +72,7 @@ public class VendingMachineTest {
 
         private class VendingMachine {
             Inventory inventory = new Inventory();
+            private int money;
 
             public void buy(String name) {
                 inventory.drinks.stream()
@@ -76,10 +83,23 @@ public class VendingMachineTest {
 
             public void addDrink(String name) {
                 inventory.drinks.add(name);
+                if(name.equals("coke")) {
+                    money = money - 120;
+                } else {
+                    money = money - 150;
+                }
             }
 
             public String inventory() {
                 return "coke:" + inventory.countBy("coke") + " water:" + inventory.countBy("water");
+            }
+
+            public void charge(int money) {
+                this.money = money;
+            }
+
+            public int currentCharge() {
+                return money;
             }
 
             class Inventory {
