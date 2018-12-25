@@ -65,24 +65,29 @@ public class VendingMachineTest {
 
 
         private class VendingMachine {
-
-            List<String> drinks = new ArrayList();
+            Inventory inventory = new Inventory();
 
             public void buy(String name) {
-                drinks.stream()
+                inventory.drinks.stream()
                         .filter(drink -> drink.equals(name))
                         .findFirst()
-                        .map(drink -> drinks.remove(drink));
+                        .map(drink -> inventory.drinks.remove(drink));
             }
 
             public void addDrink(String name) {
-                drinks.add(name);
+                inventory.drinks.add(name);
             }
 
             public String inventory() {
-                int cokeCount = (int) drinks.stream().filter(name -> name == "coke").count();
-                int waterCount = (int) drinks.stream().filter(name -> name == "water").count();
-                return "coke:" + cokeCount + " water:" + waterCount;
+                return "coke:" + inventory.countBy("coke") + " water:" + inventory.countBy("water");
+            }
+
+            class Inventory {
+                List<String> drinks = new ArrayList();
+
+                public int countBy(String name) {
+                    return (int) drinks.stream().filter(n -> n.equals(name)).count();
+                }
             }
         }
     }
