@@ -58,6 +58,16 @@ public class VendingMachineTest {
     }
 
     @Test
+    void cantAddOverMaxDrink() {
+        VendingMachine vm = new VendingMachine();
+        for (int i = 1; i <= 11; i++) {
+            vm.addDrink("water", "100");
+        }
+        assertThat(vm.inventory.countBy("water"), is(10));
+    }
+
+
+    @Test
     void inventory() {
         VendingMachine vendingMachine = new VendingMachine();
         assertThat(vendingMachine.inventory(), is("coke 120yen: 5"));

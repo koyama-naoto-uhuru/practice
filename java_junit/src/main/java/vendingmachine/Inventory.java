@@ -68,4 +68,8 @@ public class Inventory {
         });
         return String.join("\n", result);
     }
+
+    int countBy(String name) {
+        return (int) drinks.stream().filter(d -> d.name.equals(name)).count();
+    }
 }

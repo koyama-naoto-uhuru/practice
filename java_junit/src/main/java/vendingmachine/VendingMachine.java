@@ -26,15 +26,6 @@ class VendingMachine {
         return chargeBox.reset();
     }
 
-    String inventory() {
-        return inventory.info();
-    }
-
-    VendingMachine addDrink(String name, String price) {
-        inventory.add(new Drink(name, Integer.parseInt(price)));
-        return this;
-    }
-
     boolean canBy(String name) {
         if (!inventory.existBy(name)) {
             return false;
@@ -46,5 +37,18 @@ class VendingMachine {
         int price = inventory.buyBy(name);
         chargeBox.minus(price);
     }
+
+
+    String inventory() {
+        return inventory.info();
+    }
+
+    VendingMachine addDrink(String name, String price) {
+        if (inventory.countBy(name) < 10) {
+            inventory.add(new Drink(name, Integer.parseInt(price)));
+        }
+        return this;
+    }
+
 
 }
