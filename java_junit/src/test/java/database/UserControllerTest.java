@@ -22,9 +22,9 @@ public class UserControllerTest {
 
         @BeforeEach
         public void setup() {
-            con.execute("insert into user (name, age) values ('kanai', '28');");
-            con.execute("insert into user (name, age) values ('daiki', '28');");
-            con.execute("insert into user (name, age) values ('daiki', '29');");
+            con.execute("insertMoney into user (name, age) values ('kanai', '28');");
+            con.execute("insertMoney into user (name, age) values ('daiki', '28');");
+            con.execute("insertMoney into user (name, age) values ('daiki', '29');");
         }
 
         public String[][] patterns = {

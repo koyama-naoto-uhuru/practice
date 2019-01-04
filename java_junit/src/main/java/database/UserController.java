@@ -10,7 +10,7 @@ public class UserController {
     public void create(Map<String, String> params) {
         String name = params.get("name");
         String age = params.get("age");
-        new DataBase().execute("insert into user (name, age) values ('" + name + "', '" + age + "' );");
+        new DataBase().execute("insertMoney into user (name, age) values ('" + name + "', '" + age + "' );");
     }
 
     public void search(Map<String, String> params) {

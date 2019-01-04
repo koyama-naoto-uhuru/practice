@@ -19,7 +19,7 @@ public class ZooTicketMachineTest {
                     new int[]{1200, 400}
             ).forEach(data -> {
                 ZooTicketMachine zooTicketMachine = new ZooTicketMachine(new MockZooDate(2));
-                zooTicketMachine.insert(data[0]);
+                zooTicketMachine.insertMoney(data[0]);
                 int change = zooTicketMachine.buy();
                 assertThat(change, is(data[1]));
             });
@@ -31,7 +31,7 @@ public class ZooTicketMachineTest {
         @Test
         void buyChild() {
             ZooTicketMachine zooTicketMachine = new ZooTicketMachine(new MockZooDate(2));
-            zooTicketMachine.insert(1000);
+            zooTicketMachine.insertMoney(1000);
             zooTicketMachine.setPersonCaetgory("child");
             int change = zooTicketMachine.buy();
             assertThat(change, is(600));
@@ -40,7 +40,7 @@ public class ZooTicketMachineTest {
         @Test
         void buySenior() {
             ZooTicketMachine zooTicketMachine = new ZooTicketMachine(new MockZooDate(2));
-            zooTicketMachine.insert(1000);
+            zooTicketMachine.insertMoney(1000);
             zooTicketMachine.setPersonCaetgory("senior");
             int change = zooTicketMachine.buy();
             assertThat(change, is(800));
@@ -57,11 +57,20 @@ public class ZooTicketMachineTest {
                     new int[]{2, 200}
             ).forEach(data -> {
                 ZooTicketMachine zooTicketMachine = new ZooTicketMachine(new MockZooDate(data[0]));
-                zooTicketMachine.insert(1000);
+                zooTicketMachine.insertMoney(1000);
                 int change = zooTicketMachine.buy();
                 assertThat(change, is(data[1]));
             });
         }
+    }
+
+    @Test
+    void buy2Tickets(){
+        ZooTicketMachine zooTicketMachine = new ZooTicketMachine(new MockZooDate(1));
+        zooTicketMachine.insertMoney(2000);
+        zooTicketMachine.numberOfTickets(2);
+        int change = zooTicketMachine.buy();
+        assertThat(change, is(0));
     }
 
     private class MockZooDate implements ZooDate {
