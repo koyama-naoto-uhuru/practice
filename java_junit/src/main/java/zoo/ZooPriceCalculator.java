@@ -1,8 +1,8 @@
 package zoo;
 
 public class ZooPriceCalculator {
-    public ZooDate zooDate;
-    public int numberOfTickets = 1;
+    private ZooDate zooDate;
+    private int numberOfTickets = 1;
     private PersonCategory personCategory = new PersonCategory("adult");
 
     public ZooPriceCalculator(ZooDate zooDate) {

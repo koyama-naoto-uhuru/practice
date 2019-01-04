@@ -24,6 +24,18 @@ public class ZooTicketMachineTest {
                 assertThat(change, is(data[1]));
             });
         }
+
+        @Test
+        void invalidMoney() {
+            Arrays.asList(
+                    new int[]{1, 0},
+                    new int[]{5, 0}
+            ).forEach(data -> {
+                ZooTicketMachine zooTicketMachine = new ZooTicketMachine(new MockZooDate(2));
+                zooTicketMachine.insertMoney(data[0]);
+                assertThat(zooTicketMachine.chargedMoney(), is(data[1]));
+            });
+        }
     }
 
     @Nested

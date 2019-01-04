@@ -1,7 +1,7 @@
 package zoo;
 
 public class ZooTicketMachine {
-    private int money;
+    private ZooMoney chargedMoney = new ZooMoney(0);
     private ZooPriceCalculator zooPriceCalculator;
 
     public ZooTicketMachine(ZooDate mockZooDate) {
@@ -9,11 +9,13 @@ public class ZooTicketMachine {
     }
 
     public void insertMoney(int money) {
-        this.money = money;
+        ZooMoney moneyObj = new ZooMoney(money);
+        if (moneyObj.invalidMoney()) return;
+        this.chargedMoney = moneyObj;
     }
 
     public int buy() {
-        return money - zooPriceCalculator.price();
+        return chargedMoney.value - zooPriceCalculator.price();
     }
 
     public void setPersonCaetgory(String personCategory) {
@@ -22,5 +24,9 @@ public class ZooTicketMachine {
 
     public void numberOfTickets(int numberOfTickets) {
         zooPriceCalculator.setNumberOfTickets(numberOfTickets);
+    }
+
+    public int chargedMoney() {
+        return chargedMoney.value;
     }
 }
