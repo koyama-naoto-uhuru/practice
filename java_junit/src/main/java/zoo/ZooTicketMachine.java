@@ -9,12 +9,18 @@ public class ZooTicketMachine {
     }
 
     public void insertMoney(int money) {
-        ZooMoney moneyObj = new ZooMoney(money);
-        if (moneyObj.invalidMoney()) return;
-        this.chargedMoney = moneyObj;
+        if (new ZooMoney(money).invalidMoney()) return;
+        this.chargedMoney = new ZooMoney(money);
     }
 
     public int buy() {
+        int change = calcChange();
+        if (change < 0) return 0;
+        chargedMoney = new ZooMoney(0);
+        return change;
+    }
+
+    private int calcChange() {
         return chargedMoney.value - zooPriceCalculator.price();
     }
 

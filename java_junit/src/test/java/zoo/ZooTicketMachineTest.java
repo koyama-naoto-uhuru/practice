@@ -22,6 +22,7 @@ public class ZooTicketMachineTest {
                 zooTicketMachine.insertMoney(data[0]);
                 int change = zooTicketMachine.buy();
                 assertThat(change, is(data[1]));
+                assertThat(zooTicketMachine.chargedMoney(), is(0));
             });
         }
 
@@ -36,6 +37,15 @@ public class ZooTicketMachineTest {
                 assertThat(zooTicketMachine.chargedMoney(), is(data[1]));
             });
         }
+    }
+
+    @Test
+    void notEnoughMoney() {
+        ZooTicketMachine zooTicketMachine = new ZooTicketMachine(new MockZooDate(2));
+        zooTicketMachine.insertMoney(799);
+        int change = zooTicketMachine.buy();
+        assertThat(change, is(0));
+        assertThat(zooTicketMachine.chargedMoney(), is(799));
     }
 
     @Nested
