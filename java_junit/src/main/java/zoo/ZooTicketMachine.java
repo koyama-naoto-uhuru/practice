@@ -1,7 +1,7 @@
 package zoo;
 
 public class ZooTicketMachine {
-    private String personCategory = "adult";
+    private PersonCategory personCategory = new PersonCategory("adult");
     private int money;
     private ZooDate zooDate;
 
@@ -14,7 +14,7 @@ public class ZooTicketMachine {
     }
 
     public int buy() {
-        int price = PersonCategoryEnum.priceBy(personCategory);
+        int price = personCategory.price();
         if (zooDate.isWeekend()) {
             price = price + 200;
         }
@@ -22,23 +22,7 @@ public class ZooTicketMachine {
     }
 
     public void setPersonCaetgory(String personCategory) {
-        this.personCategory = personCategory;
-    }
-
-    public enum PersonCategoryEnum {
-        adult(new Adult()),
-        child(new Child()),
-        senior(new Senior());
-
-        private PersonCategory obj;
-
-        private PersonCategoryEnum(PersonCategory personCategory) {
-            this.obj = personCategory;
-        }
-
-        public static int priceBy(String personCategory) {
-            return PersonCategoryEnum.valueOf(personCategory).obj.price();
-        }
+        this.personCategory = new PersonCategory(personCategory);
     }
 
 }

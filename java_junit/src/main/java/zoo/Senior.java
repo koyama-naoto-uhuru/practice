@@ -1,6 +1,6 @@
 package zoo;
 
-public class Senior implements PersonCategory {
+public class Senior implements IPersonCategory {
     private int price = 200;
 
 
