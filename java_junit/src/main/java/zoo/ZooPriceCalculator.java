@@ -1,11 +1,11 @@
 package zoo;
 
 public class ZooPriceCalculator {
-    private ZooDate zooDate;
+    private IZooDate zooDate;
     private int numberOfTickets = 1;
     private PersonCategory personCategory = new PersonCategory("adult");
 
-    public ZooPriceCalculator(ZooDate zooDate) {
+    public ZooPriceCalculator(IZooDate zooDate) {
         this.zooDate = zooDate;
     }
 

@@ -4,7 +4,7 @@ public class ZooTicketMachine {
     private ZooMoney chargedMoney = new ZooMoney(0);
     private ZooPriceCalculator zooPriceCalculator;
 
-    public ZooTicketMachine(ZooDate mockZooDate) {
+    public ZooTicketMachine(IZooDate mockZooDate) {
         zooPriceCalculator = new ZooPriceCalculator(mockZooDate);
     }
 

@@ -7,8 +7,17 @@ import java.util.Arrays;
 
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.isOneOf;
 
 public class ZooTicketMachineTest {
+
+    @Test
+    void buyNoMockZooDate(){
+        ZooTicketMachine zooTicketMachine = new ZooTicketMachine(new ZooDate());
+        zooTicketMachine.insertMoney(1000);
+        int change = zooTicketMachine.buy();
+        assertThat(change, isOneOf(0, 200));
+    }
 
     @Nested
     class insertAndChangeMoney {
@@ -95,7 +104,7 @@ public class ZooTicketMachineTest {
         assertThat(change, is(0));
     }
 
-    private class MockZooDate implements ZooDate {
+    private class MockZooDate implements IZooDate {
         private int dayOfWeek;
 
         public MockZooDate(int dayOfWeek) {

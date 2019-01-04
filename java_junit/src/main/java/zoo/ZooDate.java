@@ -1,16 +1,11 @@
 package zoo;
 
-public interface ZooDate {
-    int getDayOfWeek();
+import java.util.Calendar;
 
-    default boolean isWeekend() {
-        return getDayOfWeek() == 1 || getDayOfWeek() == 7;
-    }
+public class ZooDate implements IZooDate {
 
-    default int getAdditionalPrice() {
-        if (isWeekend()) {
-            return 200;
-        }
-        return 0;
+    @Override
+    public int getDayOfWeek() {
+        return Calendar.getInstance().get(Calendar.DAY_OF_WEEK);
     }
 }
