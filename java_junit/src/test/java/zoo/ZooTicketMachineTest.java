@@ -65,7 +65,7 @@ public class ZooTicketMachineTest {
     }
 
     @Test
-    void buy2Tickets(){
+    void buy2Tickets() {
         ZooTicketMachine zooTicketMachine = new ZooTicketMachine(new MockZooDate(1));
         zooTicketMachine.insertMoney(2000);
         zooTicketMachine.numberOfTickets(2);
