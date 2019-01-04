@@ -10,11 +10,7 @@ public class ZooPriceCalculator {
     }
 
     int price() {
-        int price = personCategory.price();
-        if (zooDate.isWeekend()) {
-            price = price + 200;
-        }
-        return price * numberOfTickets;
+        return (personCategory.price() + zooDate.getAdditionalPrice()) * numberOfTickets;
     }
 
     public void setNumberOfTickets(int numberOfTickets) {
