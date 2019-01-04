@@ -1,5 +1,7 @@
 package vendingmachine;
 
+import java.util.Arrays;
+
 class VendingMachine {
     Inventory inventory;
     private ChargeBox chargeBox = new ChargeBox();
@@ -12,10 +14,14 @@ class VendingMachine {
     }
 
     VendingMachine charge(int money) {
-        if (money == 10 || money == 50 || money == 100 || money == 500 || money == 1000) {
+        if (isValidMoney(money)) {
             chargeBox.add(money);
         }
         return this;
+    }
+
+    private boolean isValidMoney(int money) {
+        return Arrays.asList(10, 50, 100, 500, 1000).contains(money);
     }
 
     Integer currentCharge() {
