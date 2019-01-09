@@ -5,7 +5,8 @@ import java.util.List;
 import java.util.Map;
 
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.hamcrest.CoreMatchers.*;
+import static org.hamcrest.MatcherAssert.assertThat;
 
 public class UserControllerTest {
 
@@ -22,7 +23,7 @@ public class UserControllerTest {
 //            new UserController().create(params);
             //then
             List<Map> list = con.find("select * from user;");
-            assertEquals(1, list.size());
+            assertThat(1, is(list.size()));
         }
 
 }
