@@ -1,9 +1,9 @@
-package todo;
+package article;
 
-public class Todo {
+public class Article {
     private String id;
-    private String title;
-    private String body;
+    public String title;
+    public String body;
     private String status;
     private String createdAt;
 
@@ -28,6 +28,16 @@ public class Todo {
     }
 
     public String toJson() {
-        return "title: " + title;
+        return "title: " + title + " body: " + body;
+    }
+
+    boolean inValid() {
+        if (title.length() > 20) {
+            return true;
+        }
+        if (body.length() > 50) {
+            return true;
+        }
+        return false;
     }
 }
