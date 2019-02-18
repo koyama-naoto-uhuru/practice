@@ -8,7 +8,12 @@ class QueryBuilder {
 
     QueryBuilder like(String key, String value) {
         if (value.equals("")) return this;
-        list.add(" " + key + " like '%" + value + "%'");
+        list.add(key + " like '%" + value + "%'");
+        return this;
+    }
+
+    QueryBuilder where(String key, String value) {
+        list.add(key + " = " + value);
         return this;
     }
 
@@ -19,4 +24,6 @@ class QueryBuilder {
         }
         return where;
     }
+
+
 }

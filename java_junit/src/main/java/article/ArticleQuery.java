@@ -12,7 +12,9 @@ public class ArticleQuery {
     }
 
     public String findById() {
-        return select() + (" where id = " + article.id + ";");
+        return select() + new QueryBuilder()
+                .where("id", article.id)
+                .build();
     }
 
     public String search() {
