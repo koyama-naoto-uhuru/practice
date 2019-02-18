@@ -5,7 +5,7 @@ import java.util.List;
 import java.util.Map;
 
 public class UserController {
-    public List<Map> list = new ArrayList<Map>();
+    public List<Map> items = new ArrayList<Map>();
 
     public void create(Map<String, String> params) {
         String name = params.get("name");
@@ -26,7 +26,7 @@ public class UserController {
             query.append(" where " + String.join(" AND ", wheres));
         }
         query.append(";");
-        list = new DataBase().find(query.toString());
+        items = new DataBase().find(query.toString()).items;
     }
 
 }

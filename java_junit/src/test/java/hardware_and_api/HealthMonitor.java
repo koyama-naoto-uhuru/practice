@@ -20,9 +20,9 @@ public class HealthMonitor {
     private class DataApi {
         private String getColor() {
             DataBase dataBase = new DataBase();
-            List list = dataBase.find("select * from log where status = 0;");
+            List items = dataBase.find("select * from log where status = 0;").items;
             String color;
-            if (list.size() >= 1) {
+            if (items.size() >= 1) {
                 color = "Red";
             } else {
                 color = "Green";

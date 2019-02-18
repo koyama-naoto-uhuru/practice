@@ -44,7 +44,7 @@ public class UserControllerTest {
             UserController userContorller = new UserController();
             userContorller.search(params);
             //then
-            assertEquals(Float.parseFloat("pattern: " + pattern[0] + pattern[1]), Integer.parseInt(pattern[2]), userContorller.list.size());
+            assertEquals(Float.parseFloat("pattern: " + pattern[0] + pattern[1]), Integer.parseInt(pattern[2]), userContorller.items.size());
         }
     }
 
@@ -58,10 +58,10 @@ public class UserControllerTest {
             //when
             new UserController().create(params);
             //then
-            List<Map> list = con.find("select * from user;");
-            assertEquals(1, list.size());
-            assertEquals("kanai", list.get(0).get("name"));
-            assertEquals(20, list.get(0).get("age"));
+            List<Map> items = con.find("select * from user;").items;
+            assertEquals(1, items.size());
+            assertEquals("kanai", items.get(0).get("name"));
+            assertEquals(20, items.get(0).get("age"));
         }
 
     }

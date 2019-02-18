@@ -3,7 +3,6 @@ package database;
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 public class DataBase {
@@ -37,7 +36,7 @@ public class DataBase {
         }
     }
 
-    public List find(String sql) {
+    public Records find(String sql) {
         ResultSet rs = query(sql);
         ResultSetMetaData md;
         ArrayList list = new ArrayList();
@@ -53,7 +52,7 @@ public class DataBase {
         } catch (SQLException e) {
             throw new RuntimeException(e.getMessage());
         }
-        return list;
+        return new Records(list);
     }
 
 }
