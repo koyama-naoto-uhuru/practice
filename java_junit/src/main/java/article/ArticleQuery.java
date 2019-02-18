@@ -8,18 +8,21 @@ public class ArticleQuery {
         this.article = article;
     }
 
+    public ArticleQuery() {
+    }
+
     public String findById() {
         return select() + (" where id = " + article.id + ";");
     }
 
-    public String like() {
+    public String search() {
         return select() + new QueryBuilder()
                 .like("title", article.title)
                 .like("body", article.body)
                 .build();
     }
 
-    private String select() {
+    public String select() {
         return "select * from articles";
     }
 }

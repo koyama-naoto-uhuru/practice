@@ -23,14 +23,15 @@ public class ArticleController {
         return records.firstMapTo(Article.class).toJson();
     }
 
+
     public String index() {
-        Records records = dataBase.find("select * from articles;");
+        Records records = dataBase.find(new ArticleQuery().select());
         return new Articles(records.mapTo(Article.class)).toJson();
     }
 
     public String search(Map<String, String> params) {
         Article article = new ObjectMapper().convertValue(params, Article.class);
-        Records records = dataBase.find(new ArticleQuery(article).like());
+        Records records = dataBase.find(new ArticleQuery(article).search());
         return new Articles(records.mapTo(Article.class)).toJson();
     }
 
