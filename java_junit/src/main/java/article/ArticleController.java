@@ -17,8 +17,9 @@ public class ArticleController {
         return "created";
     }
 
-    public String show(int id) {
-        Records records = dataBase.find("select * from articles where id = " + id + ";");
+    public String show(Map<String, String> params) {
+        Article article = new ObjectMapper().convertValue(params, Article.class);
+        Records records = dataBase.find(new ArticleQuery(article).findById());
         return records.firstMapTo(Article.class).toJson();
     }
 
@@ -29,7 +30,7 @@ public class ArticleController {
 
     public String search(Map<String, String> params) {
         Article article = new ObjectMapper().convertValue(params, Article.class);
-        Records records = dataBase.find("select * from articles" + article.searchQuery());
+        Records records = dataBase.find(new ArticleQuery(article).like());
         return new Articles(records.mapTo(Article.class)).toJson();
     }
 

@@ -65,7 +65,9 @@ public class ArticleControllerTest {
         new ArticleController().create(params("buy beer", "good beer"));
         Records records = dataBase.find("select * from articles;");
         //when
-        String responseBody = new ArticleController().show((Integer) records.first().get("id"));
+        Map<String, String> params= new HashMap<>();
+        params.put("id", String.valueOf(records.first().get("id")));
+        String responseBody = new ArticleController().show(params);
         //then
         assertEquals(true, responseBody.contains("title: buy beer"), responseBody);
     }

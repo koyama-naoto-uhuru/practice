@@ -1,7 +1,7 @@
 package article;
 
 public class Article {
-    private String id;
+    public String id;
     public String title;
     public String body;
     private String status;
@@ -41,7 +41,4 @@ public class Article {
         return false;
     }
 
-    String searchQuery() {
-        return new QueryBuilder().like("title", title).like("body", body).build();
-    }
 }
