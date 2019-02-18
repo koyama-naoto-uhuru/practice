@@ -40,4 +40,8 @@ public class Article {
         }
         return false;
     }
+
+    String searchQuery() {
+        return new QueryBuilder().like("title", title).like("body", body).build();
+    }
 }

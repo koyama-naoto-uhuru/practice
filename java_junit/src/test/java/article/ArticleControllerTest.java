@@ -92,6 +92,18 @@ public class ArticleControllerTest {
         }
 
         @Test
+        void likeTitleAndBody() {
+            //given
+            Map<String, String> params = params("wine", "good");
+            //when
+            String responseBody = new ArticleController().search(params);
+            //then
+            assertEquals(false, responseBody.contains("title: buy beer"), responseBody);
+            assertEquals(true, responseBody.contains("title: buy wine"), responseBody);
+            assertEquals(false, responseBody.contains("title: buy chili wine"), responseBody);
+        }
+
+        @Test
         void likeTitle() {
             //given
             Map<String, String> params = params("wine", "");

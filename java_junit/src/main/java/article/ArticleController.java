@@ -28,14 +28,9 @@ public class ArticleController {
     }
 
     public String search(Map<String, String> params) {
-        String where = null;
-        if(!params.get("title").equals("")) {
-            where = " where title like '%" + params.get("title") + "%';";
-        }
-        if(!params.get("body").equals("")) {
-            where = " where body like '%" + params.get("body") + "%';";
-        }
-        Records records = dataBase.find("select * from articles" + where);
+        Article article = new ObjectMapper().convertValue(params, Article.class);
+        Records records = dataBase.find("select * from articles" + article.searchQuery());
         return new Articles(records.mapTo(Article.class)).toJson();
     }
+
 }
