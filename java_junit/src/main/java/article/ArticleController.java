@@ -27,4 +27,15 @@ public class ArticleController {
         return new Articles(records.mapTo(Article.class)).toJson();
     }
 
+    public String search(Map<String, String> params) {
+        String where = null;
+        if(!params.get("title").equals("")) {
+            where = " where title like '%" + params.get("title") + "%';";
+        }
+        if(!params.get("body").equals("")) {
+            where = " where body like '%" + params.get("body") + "%';";
+        }
+        Records records = dataBase.find("select * from articles" + where);
+        return new Articles(records.mapTo(Article.class)).toJson();
+    }
 }

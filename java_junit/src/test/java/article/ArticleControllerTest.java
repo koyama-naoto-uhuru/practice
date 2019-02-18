@@ -82,6 +82,40 @@ public class ArticleControllerTest {
         assertEquals(true, responseBody.contains("title: buy wine"), responseBody);
     }
 
+    @Nested
+    class search {
+        @BeforeEach
+        void beforeEach() {
+            new ArticleController().create(params("buy beer", "good beer"));
+            new ArticleController().create(params("buy wine", "good beer"));
+            new ArticleController().create(params("buy chili wine", "bad beer"));
+        }
+
+        @Test
+        void likeTitle() {
+            //given
+            Map<String, String> params = params("wine", "");
+            //when
+            String responseBody = new ArticleController().search(params);
+            //then
+            assertEquals(true, responseBody.contains("title: buy wine"), responseBody);
+            assertEquals(true, responseBody.contains("title: buy chili wine"), responseBody);
+            assertEquals(false, responseBody.contains("title: buy beer"), responseBody);
+        }
+
+        @Test
+        void likeBody() {
+            //given
+            Map<String, String> params = params("", "bad");
+            //when
+            String responseBody = new ArticleController().search(params);
+            //then
+            assertEquals(false, responseBody.contains("title: buy beer"), responseBody);
+            assertEquals(false, responseBody.contains("title: buy wine"), responseBody);
+            assertEquals(true, responseBody.contains("title: buy chili wine"), responseBody);
+        }
+    }
+
 
     private Map<String, String> params(String title, String body) {
         Map<String, String> map = new HashMap<>();
