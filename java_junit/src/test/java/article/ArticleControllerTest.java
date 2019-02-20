@@ -27,11 +27,12 @@ public class ArticleControllerTest {
         @Test
         void success() {
             //given
-            String responseBody = new ArticleController().create(params("buy beer", "good beer"));
             //when
-            Records records = dataBase.find("select * from articles;");
+            String responseBody = new ArticleController().create(params("buy beer", "good beer"));
             //then
+            Records records = dataBase.find("select * from articles;");
             assertEquals(1, records.size());
+            assertEquals("buy beer", records.mapTo(Article.class).get(0).title);
             assertEquals(responseBody, "created");
             assertEquals(true, records.firstMapTo(Article.class).toJson().contains("good beer"), records.firstMapTo(Article.class).toJson());
         }

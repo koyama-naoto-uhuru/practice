@@ -25,8 +25,7 @@ public class ArticleController {
 
 
     public String index() {
-        Records records = dataBase.find(new ArticleQuery().select());
-        return new Articles(records.mapTo(Article.class)).toJson();
+        return new ArticleRepository().findAll().toJson();
     }
 
     public String search(Map<String, String> params) {
