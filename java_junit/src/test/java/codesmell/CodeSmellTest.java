@@ -9,6 +9,21 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 public class CodeSmellTest {
 
     @Test
+    void duplicateCode() {
+        Person person = new Person(1, "kimura", "fumika", "09011112222");
+        assertEquals(true, person.validate());
+
+        Person person2 = new Person(2, "kimura!", "fumika", "09011112222");
+        assertEquals(false, person2.validate());
+
+        Person person3 = new Person(3, "kimura", "fumika!", "09011112222");
+        assertEquals(false, person3.validate());
+
+        Person person4 = new Person(4, "kimura", "fumika", "09011112222!");
+        assertEquals(false, person4.validate());
+    }
+
+    @Test
     void featureEnvy() {
         List<String> actual = new UserCollection().text();
         assertEquals("1. kanai daiki", actual.get(0));

@@ -30,4 +30,17 @@ public class Person {
                 this.cellPhoneNumber.substring(3, 7) + "-" +
                 this.cellPhoneNumber.substring(7, 11);
     }
+
+    public boolean validate() {
+        if (lastName.length() > 6) {
+            return false;
+        }
+
+        boolean invalidFirstName = firstName.length() > 6;
+        if (invalidFirstName) {
+            return false;
+        }
+
+        return cellPhoneNumber.length() <= 11;
+    }
 }
