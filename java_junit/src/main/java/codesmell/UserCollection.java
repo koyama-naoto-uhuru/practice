@@ -9,8 +9,8 @@ public class UserCollection {
     private List<Person> people;
 
     public UserCollection() {
-        Person person = new Person(1, "kanai", "daiki");
-        Person person2 = new Person(2, "kimura", "fumika");
+        Person person = new Person(1, "kanai", "daiki", "090-0000-0000");
+        Person person2 = new Person(2, "kimura", "fumika", "090-1111-1111");
         people = Arrays.asList(person, person2);
     }
 

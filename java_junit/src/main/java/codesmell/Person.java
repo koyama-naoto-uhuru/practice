@@ -4,13 +4,14 @@ public class Person {
     private int id;
     private final String lastName;
     private final String firstName;
+    private String cellPhoneNumber;
 
-    public Person(int id, String lastName, String firstName) {
+    public Person(int id, String lastName, String firstName, String cellPhoneNumber) {
         this.id = id;
         this.lastName = lastName;
         this.firstName = firstName;
+        this.cellPhoneNumber = cellPhoneNumber;
     }
-
 
     public String getLastName() {
         return lastName;
@@ -24,4 +25,9 @@ public class Person {
         return id;
     }
 
+    public String cellPhoneNumberWithDash() {
+        return this.cellPhoneNumber.substring(0, 3) + "-" +
+                this.cellPhoneNumber.substring(3, 7) + "-" +
+                this.cellPhoneNumber.substring(7, 11);
+    }
 }
