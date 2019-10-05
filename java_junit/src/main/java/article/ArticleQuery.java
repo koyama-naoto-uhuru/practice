@@ -3,6 +3,7 @@ package article;
 public class ArticleQuery {
 
     private Article article;
+    private String tableName = "articles";
 
     public ArticleQuery(Article article) {
         this.article = article;
@@ -25,6 +26,10 @@ public class ArticleQuery {
     }
 
     public String select() {
-        return "select * from articles";
+        return "select * from " + tableName;
+    }
+
+    public String insert() {
+        return "insert into " + tableName + " (title, body) values('" + article.title + "', '" + article.body + "');";
     }
 }

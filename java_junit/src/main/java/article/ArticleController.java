@@ -1,37 +1,47 @@
 package article;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import database.DataBase;
-import database.Records;
 
 import java.util.Map;
 
 public class ArticleController {
 
-    private DataBase dataBase = new DataBase();
+    private ArticleRepository articleRepository;
+    private ObjectMapper objectMapper;
+
+    public ArticleController() {
+        articleRepository = new ArticleRepository();
+        objectMapper = new ObjectMapper();
+    }
 
     public String create(Map<String, String> params) {
-        Article article = new ObjectMapper().convertValue(params, Article.class);
+        Article article = extractArticle(params);
         if (article.inValid()) return "invalid";
-        dataBase.execute("insert into articles (title, body) values('" + article.title + "', '" + article.body + "');");
+        articleRepository.create(article);
         return "created";
     }
 
     public String show(Map<String, String> params) {
-        Article article = new ObjectMapper().convertValue(params, Article.class);
-        Records records = dataBase.find(new ArticleQuery(article).findById());
-        return records.firstMapTo(Article.class).toJson();
+        return articleRepository
+                .findById(extractArticle(params))
+                .toJson();
     }
 
 
     public String index() {
-        return new ArticleRepository().findAll().toJson();
+        return articleRepository
+                .findAll()
+                .toJson();
     }
 
     public String search(Map<String, String> params) {
-        Article article = new ObjectMapper().convertValue(params, Article.class);
-        Records records = dataBase.find(new ArticleQuery(article).search());
-        return new Articles(records.mapTo(Article.class)).toJson();
+        return articleRepository
+                .search(extractArticle(params))
+                .toJson();
+    }
+
+    private Article extractArticle(Map<String, String> params) {
+        return objectMapper.convertValue(params, Article.class);
     }
 
 }
