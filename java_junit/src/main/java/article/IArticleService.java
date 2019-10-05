@@ -1,5 +1,5 @@
 package article;
 
-public interface IArticle {
+public interface IArticleService {
     void create(Article article);
 }

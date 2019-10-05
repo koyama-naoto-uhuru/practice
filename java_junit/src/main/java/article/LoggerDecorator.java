@@ -1,6 +1,6 @@
 package article;
 
-public class LoggerDecorator implements IArticle {
+public class LoggerDecorator implements IArticleService {
     private ILogger logger;
     private ArticleService articleService;
 

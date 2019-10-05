@@ -14,16 +14,28 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 public class ArticleControllerTest {
 
     private DataBase dataBase;
-    private ArticleController articleController = new ArticleController();
+    private ArticleController articleController = new ArticleController(new Logger());
 
     @BeforeEach
     void beforeEach() {
         dataBase = new DataBase();
         dataBase.execute("delete from articles;");
+        articleController = new ArticleController(new Logger());
     }
 
     @Nested
     class create {
+        @Test
+        void logging() {
+            //given
+            ILogger logger = new FakeLogger();
+            ArticleController articleController = new ArticleController(logger);
+            //when
+            articleController.create(params("", ""));
+            //then
+            assertEquals("create log", ((FakeLogger) logger).captureMsg);
+        }
+
         @Test
         void success() {
             //given
@@ -58,19 +70,37 @@ public class ArticleControllerTest {
             assertEquals(0, records.size());
             assertEquals(responseBody, "invalid");
         }
+
+        private class FakeLogger implements ILogger {
+
+            public String captureMsg;
+
+            @Override
+            public void info(String msg) {
+                this.captureMsg = msg;
+            }
+        }
     }
 
     @Test
     void show() {
-        //given
-        articleController.create(params("buy beer", "good beer"));
-        Records records = dataBase.find("select * from articles;");
-        //when
+        there_is_article("buy beer");
+        String responseBody = when_show_article_by(dataBase.findFirst("articles").get("id"));
+        then_shoud_has(responseBody, "title: buy beer");
+    }
+
+    private void then_shoud_has(String responseBody, String s) {
+        assertEquals(true, responseBody.contains(s), responseBody);
+    }
+
+    private String when_show_article_by(Object id) {
         Map<String, String> params = new HashMap<>();
-        params.put("id", String.valueOf(records.first().get("id")));
-        String responseBody = articleController.show(params);
-        //then
-        assertEquals(true, responseBody.contains("title: buy beer"), responseBody);
+        params.put("id", String.valueOf(id));
+        return articleController.show(params);
+    }
+
+    private void there_is_article(String buy_beer) {
+        articleController.create(params(buy_beer, "good beer"));
     }
 
     @Test

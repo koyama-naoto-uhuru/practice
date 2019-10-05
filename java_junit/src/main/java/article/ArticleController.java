@@ -6,7 +6,7 @@ import java.util.Map;
 
 public class ArticleController {
 
-    private IArticle articleService;
+    private IArticleService articleService;
     private ObjectMapper objectMapper;
     private ArticleRepository articleRepository;
 

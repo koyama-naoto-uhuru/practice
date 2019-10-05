@@ -11,6 +11,7 @@ public class ArticleService {
 
     public void create(Article article) {
         articleRepository.create(article);
+
     }
 
 }

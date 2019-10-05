@@ -55,4 +55,7 @@ public class DataBase {
         return new Records(list);
     }
 
+    public Map findFirst(final String tableName) {
+        return find("select * from " + tableName + ";").first();
+    }
 }

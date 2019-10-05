@@ -7,6 +7,7 @@ import java.util.Map;
 import java.util.stream.Collectors;
 
 public class Records {
+    private final ObjectMapper objectMapper = new ObjectMapper();
     public List items;
 
     public Records(List items) {
@@ -22,10 +23,10 @@ public class Records {
     }
 
     public <T> List<T> mapTo(Class<T> clazz) {
-        return (List<T>) items.stream().map(item -> new ObjectMapper().convertValue(item, clazz)).collect(Collectors.toList());
+        return (List<T>) items.stream().map(item -> objectMapper.convertValue(item, clazz)).collect(Collectors.toList());
     }
 
     public <T> T firstMapTo(Class<T> clazz) {
-        return new ObjectMapper().convertValue(first(), clazz);
+        return objectMapper.convertValue(first(), clazz);
     }
 }
