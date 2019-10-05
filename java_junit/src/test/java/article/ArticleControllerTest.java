@@ -14,6 +14,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 public class ArticleControllerTest {
 
     private DataBase dataBase;
+    private ArticleController articleController = new ArticleController();
 
     @BeforeEach
     void beforeEach() {
@@ -21,14 +22,13 @@ public class ArticleControllerTest {
         dataBase.execute("delete from articles;");
     }
 
-
     @Nested
     class create {
         @Test
         void success() {
             //given
             //when
-            String responseBody = new ArticleController().create(params("buy beer", "good beer"));
+            String responseBody = articleController.create(params("buy beer", "good beer"));
             //then
             Records records = dataBase.find("select * from articles;");
             assertEquals(1, records.size());
@@ -40,7 +40,7 @@ public class ArticleControllerTest {
         @Test
         void tooLongTitle() {
             //given
-            String responseBody = new ArticleController().create(params("buy beer xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx", "good beer"));
+            String responseBody = articleController.create(params("buy beer xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx", "good beer"));
             //when
             Records records = dataBase.find("select * from articles;");
             //then
@@ -51,7 +51,7 @@ public class ArticleControllerTest {
         @Test
         void tooLongBody() {
             //given
-            String responseBody = new ArticleController().create(params("buy beer", "good beer xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx"));
+            String responseBody = articleController.create(params("buy beer", "good beer xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx"));
             //when
             Records records = dataBase.find("select * from articles;");
             //then
@@ -63,12 +63,12 @@ public class ArticleControllerTest {
     @Test
     void show() {
         //given
-        new ArticleController().create(params("buy beer", "good beer"));
+        articleController.create(params("buy beer", "good beer"));
         Records records = dataBase.find("select * from articles;");
         //when
-        Map<String, String> params= new HashMap<>();
+        Map<String, String> params = new HashMap<>();
         params.put("id", String.valueOf(records.first().get("id")));
-        String responseBody = new ArticleController().show(params);
+        String responseBody = articleController.show(params);
         //then
         assertEquals(true, responseBody.contains("title: buy beer"), responseBody);
     }
@@ -76,10 +76,10 @@ public class ArticleControllerTest {
     @Test
     void index() {
         //given
-        new ArticleController().create(params("buy beer", "good beer"));
-        new ArticleController().create(params("buy wine", "good beer"));
+        articleController.create(params("buy beer", "good beer"));
+        articleController.create(params("buy wine", "good beer"));
         //when
-        String responseBody = new ArticleController().index();
+        String responseBody = articleController.index();
         //then
         assertEquals(true, responseBody.contains("title: buy beer"), responseBody);
         assertEquals(true, responseBody.contains("title: buy wine"), responseBody);
@@ -89,9 +89,9 @@ public class ArticleControllerTest {
     class search {
         @BeforeEach
         void beforeEach() {
-            new ArticleController().create(params("buy beer", "good beer"));
-            new ArticleController().create(params("buy wine", "good beer"));
-            new ArticleController().create(params("buy chili wine", "bad beer"));
+            articleController.create(params("buy beer", "good beer"));
+            articleController.create(params("buy wine", "good beer"));
+            articleController.create(params("buy chili wine", "bad beer"));
         }
 
         @Test
@@ -99,7 +99,7 @@ public class ArticleControllerTest {
             //given
             Map<String, String> params = params("wine", "good");
             //when
-            String responseBody = new ArticleController().search(params);
+            String responseBody = articleController.search(params);
             //then
             assertEquals(false, responseBody.contains("title: buy beer"), responseBody);
             assertEquals(true, responseBody.contains("title: buy wine"), responseBody);
@@ -111,7 +111,7 @@ public class ArticleControllerTest {
             //given
             Map<String, String> params = params("wine", "");
             //when
-            String responseBody = new ArticleController().search(params);
+            String responseBody = articleController.search(params);
             //then
             assertEquals(true, responseBody.contains("title: buy wine"), responseBody);
             assertEquals(true, responseBody.contains("title: buy chili wine"), responseBody);
@@ -123,7 +123,7 @@ public class ArticleControllerTest {
             //given
             Map<String, String> params = params("", "bad");
             //when
-            String responseBody = new ArticleController().search(params);
+            String responseBody = articleController.search(params);
             //then
             assertEquals(false, responseBody.contains("title: buy beer"), responseBody);
             assertEquals(false, responseBody.contains("title: buy wine"), responseBody);
