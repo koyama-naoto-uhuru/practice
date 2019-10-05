@@ -6,35 +6,36 @@ import java.util.Map;
 
 public class ArticleController {
 
-    private ArticleRepository articleRepository;
+    private IArticle articleService;
     private ObjectMapper objectMapper;
+    private ArticleRepository articleRepository;
 
-    public ArticleController() {
-        articleRepository = new ArticleRepository();
+    ArticleController(ILogger logger) {
         objectMapper = new ObjectMapper();
+        articleService = new LoggerDecorator(new ArticleService(), logger);
+        articleRepository = new ArticleRepository();
     }
 
     public String create(Map<String, String> params) {
         Article article = extractArticle(params);
         if (article.inValid()) return "invalid";
-        articleRepository.create(article);
+        articleService.create(article);
         return "created";
     }
 
-    public String show(Map<String, String> params) {
+    String show(Map<String, String> params) {
         return articleRepository
                 .findById(extractArticle(params))
                 .toJson();
     }
 
-
-    public String index() {
+    String index() {
         return articleRepository
                 .findAll()
                 .toJson();
     }
 
-    public String search(Map<String, String> params) {
+    String search(Map<String, String> params) {
         return articleRepository
                 .search(extractArticle(params))
                 .toJson();
