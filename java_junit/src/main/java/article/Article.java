@@ -20,4 +20,9 @@ class Article {
     public boolean isInValid() {
         return isInValidTitle() || isInValidBody();
     }
+
+    @Override
+    public String toString() {
+        return "'" + title + "','" + body + "'";
+    }
 }
