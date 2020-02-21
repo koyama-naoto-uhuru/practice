@@ -3,6 +3,8 @@ package article;
 class Article {
     public final String title;
     public final String body;
+    public static final int MAX_TITLE_SIZE = 20;
+    public static final int MAX_BODY_SIZE = 2000;
 
     public Article(String title, String body) {
         this.title = title;
@@ -10,11 +12,11 @@ class Article {
     }
 
     public boolean isInValidBody() {
-        return body != null && body.length() > 2000;
+        return body != null && body.length() > MAX_BODY_SIZE;
     }
 
     public boolean isInValidTitle() {
-        return title != null && title.length() > 20;
+        return title != null && title.length() > MAX_TITLE_SIZE;
     }
 
     public boolean isInValid() {
