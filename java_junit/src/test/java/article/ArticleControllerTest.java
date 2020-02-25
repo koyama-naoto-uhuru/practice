@@ -14,8 +14,6 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 
 public class ArticleControllerTest {
 
-    private ArticleController articleController = new ArticleController(new FakeLogger());
-
     @BeforeEach
     void setup() {
         init();
@@ -23,18 +21,14 @@ public class ArticleControllerTest {
 
     @Nested
     class Create {
-        private Map<String, String> params = new HashMap();
-        private final String validTitle = createWord(Article.MAX_TITLE_SIZE);
-        private final String inValidTitle = createWord(Article.MAX_TITLE_SIZE + 1);
-        private final String validBody = createWord(Article.MAX_BODY_SIZE);
-        private final String inValidBody = createWord(Article.MAX_BODY_SIZE + 1);
 
         @Test
         void createThenReturnCount1Record() {
             //given
-            params.put("title", validTitle);
+            Map<String, String> params = new HashMap();
+            params.put("title", "I love Beer.");
             //when
-            articleController.create(params);
+            new ArticleController(new FakeLogger()).create(params);
             //then
             Records records = new DataBase().find("select * from articles;");
             assertEquals(1, records.size());
@@ -43,9 +37,10 @@ public class ArticleControllerTest {
         @Test
         void InValidInputReturnCount0Record() {
             //given
-            params.put("title", inValidTitle);
+            Map<String, String> params = new HashMap();
+            params.put("title", getInvalidTitle());
             //when
-            articleController.create(params);
+            new ArticleController(new FakeLogger()).create(params);
             //then
             Records records = new DataBase().find("select * from articles;");
             assertEquals(0, records.size());
@@ -54,37 +49,36 @@ public class ArticleControllerTest {
         @Test
         void createdTitle() {
             //given
-            params.put("title", validTitle);
+            Map<String, String> params = new HashMap();
+            params.put("title", "I love Beer.");
             //when
-            articleController.create(params);
+            new ArticleController(new FakeLogger()).create(params);
             //then
             Records records = new DataBase().find("select * from articles;");
-            assertEquals(validTitle, records.first().get("title"));
+            assertEquals("I love Beer.", records.first().get("title"));
         }
 
         @Test
         void createdBody() {
             //given
-
+            Map<String, String> params = new HashMap();
+            params.put("title", "I love Beer.");
+            params.put("body", "I love Beer Body.");
             //when
-            articleController.create(defaultParams());
+            new ArticleController(new FakeLogger()).create(params);
             //then
             Records records = new DataBase().find("select * from articles;");
-            assertEquals(validBody, records.first().get("body"));
-        }
-
-        private Map<String, String> defaultParams() {
-            Map<String, String> map = new HashMap<>();
-            map.put("title", validTitle);
-            map.put("body", validBody);
-            return map;
+            assertEquals("I love Beer Body.", records.first().get("body"));
         }
 
         @Test
         void validInputReturnSuccess() {
             //given
+            Map<String, String> params = new HashMap();
+            params.put("title", "I love Beer.");
+            params.put("body", "I love Beer Body.");
             //when
-            String createResponse = articleController.create(defaultParams());
+            String createResponse = new ArticleController(new FakeLogger()).create(params);
             //then
             assertEquals("success", createResponse);
         }
@@ -92,10 +86,11 @@ public class ArticleControllerTest {
         @Test
         void invalidTitleReturnInvalid() {
             //given
-            params.put("title", inValidTitle);
-            params.put("body", validBody);
+            Map<String, String> params = new HashMap();
+            params.put("title", getInvalidTitle());
+            params.put("body", "I love Beer Body.");
             //when
-            String createResponse = articleController.create(params);
+            String createResponse = new ArticleController(new FakeLogger()).create(params);
             //then
             assertEquals("invalid", createResponse);
         }
@@ -103,10 +98,11 @@ public class ArticleControllerTest {
         @Test
         void invalidBodyReturnInvalid() {
             //given
-            params.put("title", validTitle);
-            params.put("body", inValidBody);
+            Map<String, String> params = new HashMap();
+            params.put("title", "12345678901234567890");
+            params.put("body", createInvalidBody());
             //when
-            String createResponse = articleController.create(params);
+            String createResponse = new ArticleController(new FakeLogger()).create(params);
             //then
             assertEquals("invalid", createResponse);
         }
@@ -114,21 +110,27 @@ public class ArticleControllerTest {
         @Test
         void logger() {
             //given
+            Map<String, String> params = new HashMap();
             params.put("title", "hoge");
             params.put("body", "fuga");
             //when
+            ArticleController articleController = new ArticleController(new FakeLogger());
             String createResponse = articleController.create(params);
             //then
             FakeLogger logger = (FakeLogger) articleController.logger;
             assertEquals("'hoge','fuga'", logger.getContent());
         }
 
-        private String createWord(int wordSize) {
-            String word = "";
-            for (int i = 0; i < wordSize; i++) {
-                word += "a";
+        private String getInvalidTitle() {
+            return "123456789012345678901";
+        }
+
+        private String createInvalidBody() {
+            String invalidBody = "";
+            for (int i = 0; i < 2001; i++) {
+                invalidBody += "a";
             }
-            return word;
+            return invalidBody;
         }
 
     }
@@ -143,11 +145,10 @@ public class ArticleControllerTest {
             //when
             Map<String, String> paramsForSearch = new HashMap();
             paramsForSearch.put("searchWord", "12345678901234567890");
-            List<Article> articleList = articleController.search(paramsForSearch);
+            List<Article> articleList = new ArticleController(new FakeLogger()).search(paramsForSearch);
             //then
             assertEquals(1, articleList.size());
         }
-
         @Test
         void searchByNotExistTitle() {
             //given
@@ -155,7 +156,7 @@ public class ArticleControllerTest {
             //when
             Map<String, String> paramsForSearch = new HashMap();
             paramsForSearch.put("searchWord", "hogehoge");
-            List<Article> articleList = articleController.search(paramsForSearch);
+            List<Article> articleList = new ArticleController(new FakeLogger()).search(paramsForSearch);
             //then
             assertEquals(0, articleList.size());
         }
@@ -167,7 +168,7 @@ public class ArticleControllerTest {
             //when
             Map<String, String> paramsForSearch = new HashMap();
             paramsForSearch.put("searchWord", "I love Beer Body.");
-            List<Article> articleList = articleController.search(paramsForSearch);
+            List<Article> articleList = new ArticleController(new FakeLogger()).search(paramsForSearch);
             //then
             assertEquals(1, articleList.size());
         }
@@ -179,7 +180,7 @@ public class ArticleControllerTest {
             //when
             Map<String, String> paramsForSearch = new HashMap();
             paramsForSearch.put("searchWord", "hogehoge");
-            List<Article> articleList = articleController.search(paramsForSearch);
+            List<Article> articleList = new ArticleController(new FakeLogger()).search(paramsForSearch);
             //then
             assertEquals(0, articleList.size());
         }
@@ -191,7 +192,7 @@ public class ArticleControllerTest {
             //when
             Map<String, String> paramsForSearch = new HashMap();
             paramsForSearch.put("searchWord", "Beer");
-            List<Article> articleList = articleController.search(paramsForSearch);
+            List<Article> articleList = new ArticleController(new FakeLogger()).search(paramsForSearch);
             //then
             assertEquals(1, articleList.size());
         }
@@ -205,7 +206,7 @@ public class ArticleControllerTest {
             //when
             Map<String, String> paramsForSearch = new HashMap();
             paramsForSearch.put("searchWord", "Beer");
-            List<Article> articleList = articleController.search(paramsForSearch);
+            List<Article> articleList = new ArticleController(new FakeLogger()).search(paramsForSearch);
             //then
             assertEquals(2, articleList.size());
             articleList.forEach(article -> {
@@ -218,11 +219,10 @@ public class ArticleControllerTest {
             Map<String, String> paramsForCreate = new HashMap();
             paramsForCreate.put("title", title);
             paramsForCreate.put("body", body);
-            articleController.create(paramsForCreate);
+            new ArticleController(new FakeLogger()).create(paramsForCreate);
         }
 
     }
-
     void init() {
         new DataBase().execute("delete from articles;");
     }
