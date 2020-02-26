@@ -1,4 +1,6 @@
+package group_a;
 
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
@@ -10,19 +12,19 @@ class UserTest {
     @Test
     public void validationTest_8moji() {
         User maker = new User("鈴木", "kaisya", "abc@test.jp", "password");
-        assertEquals(true, maker.validate());
+        Assertions.assertEquals(true, maker.validate());
     }
 
     @Test
     public void validationTest_10moji() {
         User maker = new User("鈴木", "", "", "1234567890");
-        assertEquals(true, maker.validate());
+        Assertions.assertEquals(true, maker.validate());
     }
 
     @Test
     public void validationTest_4moji_ng() {
         User maker = new User("鈴木", "", "", "pass");
-        assertEquals(false, maker.validate());
+        Assertions.assertEquals(false, maker.validate());
     }
 
     @Nested

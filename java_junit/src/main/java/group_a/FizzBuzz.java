@@ -1,3 +1,5 @@
+package group_a;
+
 public class FizzBuzz {
     public String fizzbuzz(int i) {
         String str = String.valueOf(i);

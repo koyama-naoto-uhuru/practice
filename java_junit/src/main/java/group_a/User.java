@@ -1,3 +1,5 @@
+package group_a;
+
 public class User {
 
     private String company;

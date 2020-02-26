@@ -43,7 +43,7 @@ public class ExcerciseTest {
             TestCase testCase = new TestCase(new User("氏名", null, "mail@mail.com", "12345678"), "氏名 OK");
 
 
-//            User user = new User("氏名", null, "mail@mail.com", "12345678");
+//            group_a.User user = new group_a.User("氏名", null, "mail@mail.com", "12345678");
             for (User current : users) {
                 String result = current.getShomei();
                 assertEquals("氏名 OK", result);
