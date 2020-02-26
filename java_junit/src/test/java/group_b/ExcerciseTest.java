@@ -1,4 +1,4 @@
-package test200226;
+package group_b;
 
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;

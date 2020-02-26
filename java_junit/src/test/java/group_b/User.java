@@ -1,4 +1,4 @@
-package test200226;
+package group_b;
 
 public class User {
     private final String name;
